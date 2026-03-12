@@ -149,5 +149,12 @@ Seeding runs in a transaction and uses ignore on unique constraints to be idempo
 
 ---
 
+## Audit checklist
+- Public repository
+- .gitignore added
+- README added
+- LICENSE added
+- No sensitive information included
+
 ## License
 Academic / educational use.
