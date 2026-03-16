@@ -1,13 +1,24 @@
 import 'package:diploma_work_prog/data/dao/food_dao.dart';
 import 'package:diploma_work_prog/models/portion.dart';
 
+/// Represents the aggregated nutrition values for one or more food portions.
+///
+/// Stores the total weight in grams together with the calculated
+/// energy and macronutrient values.
 class NutritionResult {
+  /// Total weight of all selected portions in grams.
   final double grams;
+  /// Total energy value in kilocalories.
   final double kcal;
+  /// Total protein amount in grams.
   final double proteins;
+  /// Total fats amount in grams.
   final double fats;
+  /// Total carbohydrates amount in grams.
   final double carbohydrates;
 
+  /// Creates a nutrition result object with total grams, calories,
+  /// proteins, fats, and carbohydrates.
   const NutritionResult({
     required this.grams,
     required this.kcal,
@@ -16,6 +27,7 @@ class NutritionResult {
     required this.carbohydrates,
   });
 
+  /// A zero-value result used when no portions are provided.
   static const zero = NutritionResult(
     grams: 0,
     kcal: 0,
@@ -25,10 +37,27 @@ class NutritionResult {
   );
 }
 
+/// Calculates total nutrition values for a list of food portions.
+///
+/// Uses [FoodDao] to load food data and then aggregates calories,
+/// proteins, fats, and carbohydrates based on portion weight.
 class NutritionCalculator {
+  /// Data access object used to load food nutrition data.
   final FoodDao foodDao;
+
+  /// Creates a calculator that uses the provided [FoodDao]
+  /// to access food nutrition data.
   const NutritionCalculator(this.foodDao);
 
+  /// Calculates total nutrition values for the provided [portions].
+  ///
+  /// Returns a [NutritionResult] containing the total grams, calories,
+  /// proteins, fats, and carbohydrates for the full list.
+  ///
+  /// Returns [NutritionResult.zero] if the list is empty.
+  ///
+  /// Throws an [ArgumentError] if any portion has a non-positive
+  /// gram value.
   Future<NutritionResult> calculate(List<Portion> portions) async {
     if (portions.isEmpty) return NutritionResult.zero;
 

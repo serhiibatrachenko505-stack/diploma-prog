@@ -3,14 +3,22 @@ import 'package:diploma_work_prog/ui/widgets/app_input.dart';
 import 'package:diploma_work_prog/ui/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
+/// Registration screen of the application.
+///
+/// Allows the user to create a new account by entering username,
+/// email, password, and password confirmation, and then sends
+/// the registration request through [AuthService].
 class RegisterScreen extends StatefulWidget {
+  /// Authentication service used to perform registration operations.
   final AuthService auth;
 
+  /// Creates a registration screen with an optional injected [AuthService].
   RegisterScreen({
     super.key,
     AuthService? auth
   }) : auth = auth ?? AuthService();
 
+  /// Creates the mutable state for [RegisterScreen].
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }

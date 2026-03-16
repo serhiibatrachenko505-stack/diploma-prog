@@ -1,11 +1,25 @@
 import 'package:sqflite/sqflite.dart';
 import 'app_db.dart';
 
+/// Seeds the local database with initial reference data.
+///
+/// This class inserts predefined meal plans, vitamins, foods,
+/// and vitamin-to-food links into the database using idempotent
+/// operations so that repeated seeding does not create duplicates.
 class DbSeeder {
+  /// Creates a private singleton instance of the database seeder.
   DbSeeder._();
 
+  /// Shared singleton instance used to seed the database.
   static final DbSeeder instance = DbSeeder._();
 
+  /// Populates the database with initial reference data.
+  ///
+  /// The method inserts predefined meal plans, vitamins, foods,
+  /// and vitamin-to-food relations inside a single transaction.
+  ///
+  /// Repeated execution is safe because inserts use conflict handling
+  /// to avoid creating duplicate records.
   Future<void> seed() async {
     final db = await AppDb.instance.db;
 

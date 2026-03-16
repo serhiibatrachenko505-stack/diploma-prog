@@ -4,11 +4,18 @@ import 'package:diploma_work_prog/ui/screens/macro_calculator_screen.dart';
 import 'package:diploma_work_prog/ui/screens/main_vitamin_calculator_screen.dart';
 import 'package:flutter/material.dart';
 
+/// Main application screen shown after successful login.
+///
+/// Acts as the entry point to the authenticated part of the app
+/// and provides access to the main functional sections.
 class HomeScreen extends StatefulWidget {
+  /// Currently authenticated user displayed and used across the home flow.
   final UserModel user;
 
+  /// Creates the main screen for the provided authenticated [user].
   const HomeScreen({super.key, required this.user});
 
+  /// Creates the mutable state for [HomeScreen].
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }

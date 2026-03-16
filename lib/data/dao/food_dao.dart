@@ -2,7 +2,14 @@ import 'package:diploma_work_prog/models/food.dart';
 
 import '../db/app_db.dart';
 
+/// Provides database access methods for [Food] records.
+///
+/// This class is responsible for reading food data from the local
+/// SQLite database and converting database rows into [Food] objects.
 class FoodDao {
+  /// Returns all food items ordered by name.
+  ///
+  /// Optional [limit] and [offset] values can be used for pagination.
   Future<List<Food>> getAll({int? limit, int? offset}) async {
     final db = await AppDb.instance.db;
 
@@ -16,6 +23,10 @@ class FoodDao {
     return rows.map((row) => Food.fromMap(row)).toList();
   }
 
+  /// Searches food items by a partial name match.
+  ///
+  /// Returns a list of foods whose names contain the provided [query].
+  /// The result is ordered alphabetically and limited by [limit].
   Future<List<Food>> searchByName(String query, {int limit = 50}) async {
     final db = await AppDb.instance.db;
 
@@ -33,6 +44,9 @@ class FoodDao {
     return rows.map((row) => Food.fromMap(row)).toList();
   }
 
+  /// Returns a single [Food] by its database [id].
+  ///
+  /// Returns `null` if no matching food item is found.
   Future<Food?> getById(int id) async {
     final db = await AppDb.instance.db;
 
@@ -47,6 +61,9 @@ class FoodDao {
     return Food.fromMap(rows.first);
   }
 
+  /// Returns all food items whose identifiers are included in [ids].
+  ///
+  /// If the input list is empty, an empty list is returned.
   Future<List<Food>> getByIds(List<int> ids) async {
     if (ids.isEmpty) return [];
 

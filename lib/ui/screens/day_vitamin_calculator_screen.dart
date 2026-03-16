@@ -9,9 +9,15 @@ import 'package:diploma_work_prog/ui/widgets/app_input.dart';
 import 'package:diploma_work_prog/ui/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
+/// Screen for calculating vitamins for a full daily food list.
+///
+/// Allows the user to add multiple food portions and calculate
+/// the total vitamin amounts and percentage shares for the day.
 class DayVitaminCalculatorScreen extends StatefulWidget {
+  /// Creates the daily vitamin calculator screen.
   const DayVitaminCalculatorScreen({super.key});
 
+  /// Creates the mutable state for [DayVitaminCalculatorScreen].
   @override
   State<DayVitaminCalculatorScreen> createState() =>
       _DayVitaminCalculatorScreenState();
@@ -422,8 +428,26 @@ class _DayVitaminCalculatorScreenState extends State<DayVitaminCalculatorScreen>
   }
 }
 
-enum Gender { male, female }
-enum WeightCategory { kg40_60, kg61_75, kg76_90, kg91_105, kg105Plus }
+/// Gender selection used for daily vitamin norm calculations.
+enum Gender {
+  /// Male daily norm profile.
+  male,
+  /// Female daily norm profile.
+  female
+}
+/// Weight category used for selecting daily vitamin norms.
+enum WeightCategory {
+  /// Weight range from 40 to 60 kilograms.
+  kg40_60,
+  /// Weight range from 61 to 75 kilograms.
+  kg61_75,
+  /// Weight range from 76 to 90 kilograms.
+  kg76_90,
+  /// Weight range from 91 to 105 kilograms.
+  kg91_105,
+  ///Weight greater than 105 kilograms.
+  kg105Plus
+}
 
 class _DayItem {
   final Food food;

@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
 
+/// Reusable text input widget used across the application forms.
+///
+/// Supports plain text input, password visibility toggle,
+/// custom keyboard type, and optional validation logic.
 class AppInput extends StatefulWidget {
+  /// Placeholder text displayed inside the input field.
   final String hint;
+  /// Controller used to read and manage the current input value.
   final TextEditingController controller;
+  /// Keyboard type used for this input field.
   final TextInputType keyboardType;
+  /// Whether the input text should be hidden, for example for passwords.
   final bool obscure;
+  /// Optional validation function used by form validation.
   final String? Function(String?)? validator;
 
+  /// Creates a reusable input widget with optional password behavior
+  /// and validation support.
   const AppInput({
     super.key,
     required this.hint,
@@ -16,6 +27,7 @@ class AppInput extends StatefulWidget {
     this.validator,
   });
 
+  /// Creates the mutable state for [AppInput].
   @override
   State<AppInput> createState() => _AppInputState();
 }

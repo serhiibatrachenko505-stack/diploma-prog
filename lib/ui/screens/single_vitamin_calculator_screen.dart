@@ -8,9 +8,15 @@ import 'package:diploma_work_prog/ui/widgets/app_input.dart';
 import 'package:diploma_work_prog/ui/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
+/// Screen for calculating vitamins for a single selected food portion.
+///
+/// Allows the user to choose one product, enter its weight in grams,
+/// and view the calculated vitamin amounts for that portion.
 class SingleVitaminCalculatorScreen extends StatefulWidget {
+  /// Creates the single-product vitamin calculator screen.
   const SingleVitaminCalculatorScreen({super.key});
 
+  /// Creates the mutable state for [SingleVitaminCalculatorScreen].
   @override
   State<SingleVitaminCalculatorScreen> createState() =>
       _SingleVitaminCalculatorScreenState();

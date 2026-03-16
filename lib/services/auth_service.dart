@@ -2,9 +2,19 @@ import 'package:diploma_work_prog/data/dao/user_dao.dart';
 import 'package:diploma_work_prog/models/user.dart';
 import 'package:diploma_work_prog/utils/hash_utils/pswd_hash_util.dart';
 
+/// Handles user registration, authentication, and password changes.
 class AuthService {
   final _userDao = UserDao();
 
+  /// Registers a new user with the provided username, email, and password.
+  ///
+  /// The method validates input values, checks whether the username or email
+  /// is already used, hashes the password, and stores the new user in the
+  /// database.
+  ///
+  /// Returns a record with:
+  /// - `ok` — `true` if registration succeeds;
+  /// - `error` — an error message if registration fails.
   Future<({bool ok, String? error})> register({
     required String username,
     required String email,
@@ -44,6 +54,17 @@ class AuthService {
     }
   }
 
+  /// Authenticates a user by login and password.
+  ///
+  /// The `login` value may contain either a username or an email address.
+  /// The method loads the user through [UserDao], verifies the password using
+  /// [HashUtil.verify], and returns the matched [UserModel] if authentication
+  /// succeeds.
+  ///
+  /// Returns a record with:
+  /// - `ok` — `true` if authentication succeeds;
+  /// - `error` — an error message if authentication fails;
+  /// - `user` — the authenticated user or `null`.
   Future<({bool ok, String? error, UserModel? user})> login({
     required String login,
     required String password
@@ -61,6 +82,17 @@ class AuthService {
     return (ok: true, error: null, user: user);
   }
 
+  /// Changes the password of an existing user.
+  ///
+  /// The method checks that the user exists, validates the new password,
+  /// compares the new password with its confirmation, verifies the current
+  /// password, generates a new hash and salt, and updates the stored password
+  /// through [UserDao].
+  ///
+  /// Returns a record with:
+  /// - `ok` — `true` if the password was changed successfully;
+  /// - `error` — an error message if the operation fails;
+  /// - `user` — the updated [UserModel] or `null`.
   Future<({bool ok, String? error, UserModel? user})> changePassword({
     required int userId,
     required String oldPassword,

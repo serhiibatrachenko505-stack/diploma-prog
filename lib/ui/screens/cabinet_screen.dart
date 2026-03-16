@@ -6,11 +6,22 @@ import 'package:diploma_work_prog/ui/widgets/app_input.dart';
 import 'package:diploma_work_prog/ui/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
+/// User profile screen of the application.
+///
+/// Displays user account information and provides actions
+/// for updating profile data and changing the password.
 class CabinetScreen extends StatefulWidget {
+  /// User whose profile data is displayed and edited on this screen.
   final UserModel user;
+  /// Data access object used for user profile updates.
   final UserDao userDao;
+  /// Authentication service used for password change operations.
   final AuthService authService;
 
+  /// Creates the cabinet screen for the provided [user].
+  ///
+  /// Optional [userDao] and [authService] instances may be injected
+  /// for custom behavior or testing.
   CabinetScreen({
     super.key,
     required this.user,
@@ -19,6 +30,7 @@ class CabinetScreen extends StatefulWidget {
   })  : userDao = userDao ?? UserDao(),
         authService = authService ?? AuthService();
 
+  /// Creates the mutable state for [CabinetScreen].
   @override
   State<CabinetScreen> createState() => _CabinetScreenState();
 }

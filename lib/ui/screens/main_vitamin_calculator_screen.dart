@@ -3,7 +3,12 @@ import 'package:diploma_work_prog/ui/screens/single_vitamin_calculator_screen.da
 import 'package:diploma_work_prog/ui/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
+/// Entry screen for the vitamin calculation module.
+///
+/// Allows the user to choose between the available vitamin
+/// calculation modes, such as single-product mode and daily mode.
 class MainVitaminCalculatorScreen extends StatelessWidget {
+  /// Creates the main vitamin calculator selection screen.
   const MainVitaminCalculatorScreen({super.key});
 
   @override

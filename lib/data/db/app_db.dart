@@ -1,13 +1,24 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+/// Provides centralized access to the local SQLite database.
+///
+/// This class is implemented as a singleton and is responsible for
+/// opening the database, creating tables on first launch, enabling
+/// foreign key support, and closing the database connection when needed.
 class AppDb {
+  /// Creates a private singleton instance of the database manager.
   AppDb._();
-  
+
+  /// Shared singleton instance used throughout the application.
   static final AppDb instance = AppDb._();
   
   Database? _db;
-  
+
+  /// Returns an opened database instance.
+  ///
+  /// If the database has already been opened, the existing instance
+  /// is returned. Otherwise, the database is opened and initialized.
   Future<Database> get db async {
     final existing = _db;
     
@@ -91,6 +102,7 @@ class AppDb {
     );
   }
 
+  /// Closes the currently opened database connection, if any.
   Future<void> close() async {
     final existing = _db;
 

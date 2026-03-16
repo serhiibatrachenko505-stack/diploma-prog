@@ -8,10 +8,15 @@ import 'package:diploma_work_prog/ui/widgets/app_input.dart';
 import 'package:diploma_work_prog/ui/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
-
+/// Screen for calculating total calories and macronutrients.
+///
+/// Allows the user to search foods, add portions, and calculate
+/// the total nutrition values for the selected list.
 class MacroCalculatorScreen extends StatefulWidget {
+  /// Creates the macro calculator screen.
   const MacroCalculatorScreen({super.key});
 
+  /// Creates the mutable state for [MacroCalculatorScreen].
   @override
   State<MacroCalculatorScreen> createState() => _MacroCalculatorScreenState();
 }

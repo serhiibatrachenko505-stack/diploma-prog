@@ -6,11 +6,18 @@ import 'package:diploma_work_prog/ui/widgets/app_input.dart';
 import 'package:diploma_work_prog/ui/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
+/// Login screen of the application.
+///
+/// Allows the user to enter a username or email together with a password,
+/// validate the input, and authenticate through [AuthService].
 class LoginScreen extends StatefulWidget {
+  /// Authentication service used to perform login operations.
   final AuthService auth;
 
+  /// Creates a login screen with an optional injected [AuthService].
   LoginScreen({super.key, AuthService? auth}) : auth = auth ?? AuthService();
 
+  /// Creates the mutable state for [LoginScreen].
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }

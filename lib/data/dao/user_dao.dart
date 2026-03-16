@@ -3,7 +3,15 @@ import 'package:sqflite/sqflite.dart';
 
 import '../db/app_db.dart';
 
+/// Provides database access methods for [UserModel] records.
+///
+/// This class is responsible for inserting users, searching users,
+/// checking uniqueness constraints, and updating user-related fields
+/// in the local SQLite database.
 class UserDao {
+  /// Inserts a new [UserModel] into the database.
+  ///
+  /// Returns the identifier of the inserted row.
   Future<int> insertUser(UserModel user) async {
     final db = await AppDb.instance.db;
 
@@ -14,6 +22,9 @@ class UserDao {
     );
   }
 
+  /// Finds a user by username or email.
+  ///
+  /// Returns the matching [UserModel] if found, or `null` otherwise.
   Future<UserModel?> findByUsernameOrEmail(String login) async {
     final db = await AppDb.instance.db;
 
@@ -29,6 +40,7 @@ class UserDao {
     return UserModel.fromMap(rows.first);
   }
 
+  /// Checks whether the specified [username] already exists in the database.
   Future<bool> isUsernameTaken(String username) async {
     final db = await AppDb.instance.db;
     final rows = await db.query(
@@ -42,6 +54,7 @@ class UserDao {
     return rows.isNotEmpty;
   }
 
+  /// Checks whether the specified [email] already exists in the database.
   Future<bool> isEmailTaken(String email) async {
     final db = await AppDb.instance.db;
     final rows = await db.query(
@@ -55,6 +68,9 @@ class UserDao {
     return rows.isNotEmpty;
   }
 
+  /// Updates the meal plan assigned to the user with the given [userId].
+  ///
+  /// Returns the number of updated rows.
   Future<int> setMealPlan(int userId, int? mealPlanId) async {
     final db = await AppDb.instance.db;
 
@@ -66,6 +82,9 @@ class UserDao {
     );
   }
 
+  /// Returns a user by the given database identifier.
+  ///
+  /// Returns `null` if the user does not exist.
   Future<UserModel?> getById(int userId) async {
     final db = await AppDb.instance.db;
 
@@ -83,6 +102,10 @@ class UserDao {
     return UserModel.fromMap(rows.first);
   }
 
+  /// Updates the username of the provided [user].
+  ///
+  /// Validates the new value, checks uniqueness, updates the database,
+  /// and returns an updated [UserModel].
   Future<UserModel> updateUserName(UserModel user, String newUserName) async {
     final db = await AppDb.instance.db;
 
@@ -114,7 +137,10 @@ class UserDao {
     return user.copyWith(username: trimmed);
   }
 
-
+  /// Updates the full name of the provided [user].
+  ///
+  /// If the new value is empty after trimming, the stored full name
+  /// is set to `null`. Returns an updated [UserModel].
   Future<UserModel> updateFullName(UserModel user, String newFullName) async {
     final db = await AppDb.instance.db;
 
@@ -138,6 +164,9 @@ class UserDao {
     return user.copyWith(fullName: valueToStore);
   }
 
+  /// Updates the stored password hash and salt for the given [userId].
+  ///
+  /// Returns the number of updated rows.
   Future<int> updatePassword(
       int userId, String newPasswordHash, String newSalt) async {
     final db = await AppDb.instance.db;
@@ -153,6 +182,10 @@ class UserDao {
     );
   }
 
+  /// Updates the email address of the provided [user].
+  ///
+  /// Validates the new value, checks uniqueness, updates the database,
+  /// and returns an updated [UserModel].
   Future<UserModel> updateEmail(UserModel user, String newEmail) async {
     final db = await AppDb.instance.db;
 
