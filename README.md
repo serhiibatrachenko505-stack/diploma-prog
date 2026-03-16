@@ -485,6 +485,30 @@ Additional deployment and maintenance documentation is placed in the `docs/` dir
 
 ---
 
-## 13. License
+## 13. Code Documentation Standards
+
+All new public classes, methods, and functions in this project must be documented using Dart documentation comments with the `///` format.
+
+Documentation rules for contributors:
+- document every public API element;
+- start each documentation block with a short summary sentence;
+- describe the purpose of the class, method, or function clearly;
+- explain important parameters, return values, and side effects when needed;
+- use Dart doc references such as `[AuthService]`, `[UserDao]`, or `[calculateForList]` when referring to other code elements;
+- keep documentation updated whenever the related code is changed.
+
+Recommended example:
+
+```dart
+/// Calculates total macronutrients for the provided food portions.
+///
+/// Returns the aggregated nutrition result for the full list of portions.
+```
+
+Project documentation can be generated from source code comments, so maintaining accurate doc comments is required for all future development.
+
+---
+
+## 14. License
 
 Academic / educational use.

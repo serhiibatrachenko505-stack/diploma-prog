@@ -38,5 +38,7 @@ linter:
     directives_ordering: true
     sort_child_properties_last: true
     use_key_in_widget_constructors: true
+    public_member_api_docs: true
+    comment_references: true
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
