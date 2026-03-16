@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:diploma_work_prog/models/user.dart';
 import 'package:diploma_work_prog/services/auth_service.dart';
+import 'package:diploma_work_prog/ui/screens/home_screen.dart';
+import 'package:diploma_work_prog/ui/screens/register_screen.dart';
 import 'package:diploma_work_prog/ui/widgets/app_input.dart';
 import 'package:diploma_work_prog/ui/widgets/primary_button.dart';
-import 'package:diploma_work_prog/ui/screens/register_screen.dart';
-import 'package:diploma_work_prog/ui/screens/home_screen.dart';
-import 'package:diploma_work_prog/models/user.dart';
+import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
   final AuthService auth;

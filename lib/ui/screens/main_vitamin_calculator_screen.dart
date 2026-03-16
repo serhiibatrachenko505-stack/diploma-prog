@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:diploma_work_prog/ui/screens/day_vitamin_calculator_screen.dart';
 import 'package:diploma_work_prog/ui/screens/single_vitamin_calculator_screen.dart';
 import 'package:diploma_work_prog/ui/widgets/primary_button.dart';
+import 'package:flutter/material.dart';
 
 class MainVitaminCalculatorScreen extends StatelessWidget {
   const MainVitaminCalculatorScreen({super.key});

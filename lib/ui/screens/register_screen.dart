@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:diploma_work_prog/services/auth_service.dart';
 import 'package:diploma_work_prog/ui/widgets/app_input.dart';
 import 'package:diploma_work_prog/ui/widgets/primary_button.dart';
+import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
   final AuthService auth;

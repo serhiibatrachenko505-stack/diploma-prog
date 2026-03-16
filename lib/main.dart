@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:diploma_work_prog/data/db/app_db.dart';
 import 'package:diploma_work_prog/data/db/db_seeder.dart';
 import 'package:diploma_work_prog/ui/screens/login_screen.dart';
+import 'package:flutter/material.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

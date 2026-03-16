@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:diploma_work_prog/models/user.dart';
+import 'package:diploma_work_prog/ui/screens/cabinet_screen.dart';
 import 'package:diploma_work_prog/ui/screens/macro_calculator_screen.dart';
 import 'package:diploma_work_prog/ui/screens/main_vitamin_calculator_screen.dart';
-import 'package:diploma_work_prog/ui/screens/cabinet_screen.dart';
+import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   final UserModel user;

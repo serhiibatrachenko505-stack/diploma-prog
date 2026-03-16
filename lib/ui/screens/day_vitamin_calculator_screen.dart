@@ -1,12 +1,13 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+
 import 'package:diploma_work_prog/data/dao/food_dao.dart';
+import 'package:diploma_work_prog/data/dao/vit_food_dao.dart';
 import 'package:diploma_work_prog/models/food.dart';
 import 'package:diploma_work_prog/models/portion.dart';
-import 'package:diploma_work_prog/data/dao/vit_food_dao.dart';
 import 'package:diploma_work_prog/services/calculators/vitamin_calculator.dart';
 import 'package:diploma_work_prog/ui/widgets/app_input.dart';
 import 'package:diploma_work_prog/ui/widgets/primary_button.dart';
+import 'package:flutter/material.dart';
 
 class DayVitaminCalculatorScreen extends StatefulWidget {
   const DayVitaminCalculatorScreen({super.key});

@@ -1,6 +1,7 @@
 import 'package:diploma_work_prog/models/user.dart';
-import '../db/app_db.dart';
 import 'package:sqflite/sqflite.dart';
+
+import '../db/app_db.dart';
 
 class UserDao {
   Future<int> insertUser(UserModel user) async {
