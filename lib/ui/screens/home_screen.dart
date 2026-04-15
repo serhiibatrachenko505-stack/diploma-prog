@@ -2,12 +2,17 @@ import 'package:diploma_work_prog/models/user.dart';
 import 'package:diploma_work_prog/ui/screens/cabinet_screen.dart';
 import 'package:diploma_work_prog/ui/screens/macro_calculator_screen.dart';
 import 'package:diploma_work_prog/ui/screens/main_vitamin_calculator_screen.dart';
+import 'package:diploma_work_prog/ui/screens/meal_plan_generator_screen.dart';
 import 'package:flutter/material.dart';
 
 /// Main application screen shown after successful login.
 ///
 /// Acts as the entry point to the authenticated part of the app
 /// and provides access to the main functional sections.
+///
+/// The screen keeps the current [UserModel] in its local state so that
+/// child tabs can update user data (for example assigned meal plan,
+/// username, or email) and keep all tabs synchronized.
 class HomeScreen extends StatefulWidget {
   /// Currently authenticated user displayed and used across the home flow.
   final UserModel user;
@@ -22,11 +27,20 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _index = 0;
+  late UserModel _user;
 
-  void _comingSoon() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Coming soon...')),
-    );
+  @override
+  void initState() {
+    super.initState();
+    _user = widget.user;
+  }
+
+  /// Updates the locally stored authenticated user.
+  ///
+  /// This callback is passed to child screens so they can notify the home
+  /// screen when user-related data changes.
+  void _handleUserUpdated(UserModel updatedUser) {
+    setState(() => _user = updatedUser);
   }
 
   @override
@@ -34,25 +48,28 @@ class _HomeScreenState extends State<HomeScreen> {
     final pages = <Widget>[
       const MacroCalculatorScreen(),
       const MainVitaminCalculatorScreen(),
-      const _ComingSoonBody(),
-      CabinetScreen(user: widget.user),
+      MealPlanGeneratorScreen(
+        user: _user,
+        onUserUpdated: _handleUserUpdated,
+      ),
+      CabinetScreen(
+        user: _user,
+        onUserUpdated: _handleUserUpdated,
+      ),
     ];
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
       ),
-
-      body: pages[_index],
-
+      body: IndexedStack(
+        index: _index,
+        children: pages,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _index,
         onTap: (i) {
-          if (i == 2) {
-            _comingSoon();
-          }
-
           setState(() => _index = i);
         },
         items: const [
@@ -66,27 +83,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.restaurant_menu_outlined),
-            label: 'Plan',
+            label: 'Meal Plan',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
             label: 'Cabinet',
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ComingSoonBody extends StatelessWidget {
-  const _ComingSoonBody();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Coming soon...',
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
       ),
     );
   }

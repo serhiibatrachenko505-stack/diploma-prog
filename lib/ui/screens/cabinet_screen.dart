@@ -10,13 +10,21 @@ import 'package:flutter/material.dart';
 ///
 /// Displays user account information and provides actions
 /// for updating profile data and changing the password.
+///
+/// The screen also supports notifying a parent widget when the user
+/// object changes, so that other parts of the application stay in sync.
 class CabinetScreen extends StatefulWidget {
   /// User whose profile data is displayed and edited on this screen.
   final UserModel user;
+
   /// Data access object used for user profile updates.
   final UserDao userDao;
+
   /// Authentication service used for password change operations.
   final AuthService authService;
+
+  /// Optional callback invoked when the user object is updated.
+  final ValueChanged<UserModel>? onUserUpdated;
 
   /// Creates the cabinet screen for the provided [user].
   ///
@@ -25,6 +33,7 @@ class CabinetScreen extends StatefulWidget {
   CabinetScreen({
     super.key,
     required this.user,
+    this.onUserUpdated,
     UserDao? userDao,
     AuthService? authService,
   })  : userDao = userDao ?? UserDao(),
@@ -46,10 +55,33 @@ class _CabinetScreenState extends State<CabinetScreen> {
   void initState() {
     super.initState();
     _user = widget.user;
-
     _loadMealPlanDescription();
   }
 
+  @override
+  void didUpdateWidget(covariant CabinetScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    final userChanged =
+        widget.user.id != oldWidget.user.id ||
+            widget.user.username != oldWidget.user.username ||
+            widget.user.email != oldWidget.user.email ||
+            widget.user.fullName != oldWidget.user.fullName ||
+            widget.user.passwordHash != oldWidget.user.passwordHash ||
+            widget.user.salt != oldWidget.user.salt ||
+            widget.user.createdAt != oldWidget.user.createdAt ||
+            widget.user.mealPlanId != oldWidget.user.mealPlanId;
+
+    if (userChanged) {
+      setState(() => _user = widget.user);
+      _loadMealPlanDescription();
+    }
+  }
+
+  /// Loads the textual description of the currently assigned meal plan.
+  ///
+  /// If the user has no assigned plan or the referenced plan does not exist,
+  /// the description is reset to `null`.
   Future<void> _loadMealPlanDescription() async {
     final planId = _user.mealPlanId;
 
@@ -88,10 +120,19 @@ class _CabinetScreenState extends State<CabinetScreen> {
     }
   }
 
+  /// Shows a short snackbar message on the current screen.
   void _showSnack(String text) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(text)),
+    );
   }
 
+  /// Notifies the parent widget that the user was updated.
+  void _notifyParent(UserModel updatedUser) {
+    widget.onUserUpdated?.call(updatedUser);
+  }
+
+  /// Builds a labeled information row for the profile screen.
   Widget _infoRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
@@ -111,6 +152,9 @@ class _CabinetScreenState extends State<CabinetScreen> {
     );
   }
 
+  /// Shows a dialog that asks the user for a text value.
+  ///
+  /// Returns the entered text or `null` if the dialog was cancelled.
   Future<String?> _askText({
     required String title,
     required String hint,
@@ -142,6 +186,7 @@ class _CabinetScreenState extends State<CabinetScreen> {
     );
   }
 
+  /// Updates the username of the current user.
   Future<void> _changeUsername() async {
     if (_user.id == null) {
       _showSnack('Cannot update username: user id is null.');
@@ -155,6 +200,7 @@ class _CabinetScreenState extends State<CabinetScreen> {
     );
 
     if (newValue == null) return;
+
     final trimmed = newValue.trim();
     if (trimmed.isEmpty) {
       _showSnack('Username cannot be empty.');
@@ -168,15 +214,19 @@ class _CabinetScreenState extends State<CabinetScreen> {
 
       if (!mounted) return;
       setState(() => _user = updated);
+      _notifyParent(updated);
       _showSnack('Username updated.');
     } catch (e) {
       if (!mounted) return;
       _showSnack('Error: $e');
     } finally {
-      if (mounted) setState(() => _isSaving = false);
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
     }
   }
 
+  /// Updates the full name of the current user.
   Future<void> _changeFullName() async {
     if (_user.id == null) {
       _showSnack('Cannot update full name: user id is null.');
@@ -198,15 +248,19 @@ class _CabinetScreenState extends State<CabinetScreen> {
 
       if (!mounted) return;
       setState(() => _user = updated);
+      _notifyParent(updated);
       _showSnack('Full name updated.');
     } catch (e) {
       if (!mounted) return;
       _showSnack('Error: $e');
     } finally {
-      if (mounted) setState(() => _isSaving = false);
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
     }
   }
 
+  /// Updates the email address of the current user.
   Future<void> _changeEmail() async {
     if (_user.id == null) {
       _showSnack('Cannot update email: user id is null.');
@@ -220,6 +274,7 @@ class _CabinetScreenState extends State<CabinetScreen> {
     );
 
     if (newValue == null) return;
+
     final trimmed = newValue.trim();
     if (trimmed.isEmpty || !trimmed.contains('@')) {
       _showSnack('Please enter a valid email.');
@@ -233,15 +288,21 @@ class _CabinetScreenState extends State<CabinetScreen> {
 
       if (!mounted) return;
       setState(() => _user = updated);
+      _notifyParent(updated);
       _showSnack('Email updated.');
     } catch (e) {
       if (!mounted) return;
       _showSnack('Error: $e');
     } finally {
-      if (mounted) setState(() => _isSaving = false);
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
     }
   }
 
+  /// Changes the password of the current user.
+  ///
+  /// Important: entered values are read before controllers are disposed.
   Future<void> _changePassword() async {
     if (_user.id == null) {
       _showSnack('Cannot change password: user id is null.');
@@ -295,6 +356,10 @@ class _CabinetScreenState extends State<CabinetScreen> {
 
     final shouldSave = ok ?? false;
 
+    final oldPassword = oldCtrl.text;
+    final newPassword = newCtrl.text;
+    final confirmNewPassword = confirmCtrl.text;
+
     oldCtrl.dispose();
     newCtrl.dispose();
     confirmCtrl.dispose();
@@ -306,15 +371,16 @@ class _CabinetScreenState extends State<CabinetScreen> {
     try {
       final res = await widget.authService.changePassword(
         userId: _user.id!,
-        oldPassword: oldCtrl.text,
-        newPassword: newCtrl.text,
-        confirmNewPassword: confirmCtrl.text,
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+        confirmNewPassword: confirmNewPassword,
       );
 
       if (!mounted) return;
 
       if (res.ok && res.user != null) {
         setState(() => _user = res.user!);
+        _notifyParent(res.user!);
         _showSnack('Password updated.');
       } else {
         _showSnack(res.error ?? 'Password update failed.');
@@ -323,13 +389,16 @@ class _CabinetScreenState extends State<CabinetScreen> {
       if (!mounted) return;
       _showSnack('Error: $e');
     } finally {
-      if (mounted) setState(() => _isSaving = false);
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final fullNameText = (_user.fullName == null || _user.fullName!.trim().isEmpty)
+    final fullNameText =
+    (_user.fullName == null || _user.fullName!.trim().isEmpty)
         ? '-'
         : _user.fullName!.trim();
 
@@ -346,7 +415,6 @@ class _CabinetScreenState extends State<CabinetScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
-
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -355,38 +423,31 @@ class _CabinetScreenState extends State<CabinetScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 12),
-
               _infoRow('Username:', _user.username),
               _infoRow('Full name:', fullNameText),
               _infoRow('Email:', _user.email),
               _infoRow('Diet plan:', planText),
-
               const SizedBox(height: 18),
-
               const Text(
                 'Actions',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 12),
-
               PrimaryButton(
                 text: 'Change username',
                 onPressed: _isSaving ? () {} : _changeUsername,
               ),
               const SizedBox(height: 10),
-
               PrimaryButton(
                 text: 'Change full name',
                 onPressed: _isSaving ? () {} : _changeFullName,
               ),
               const SizedBox(height: 10),
-
               PrimaryButton(
                 text: 'Change email',
                 onPressed: _isSaving ? () {} : _changeEmail,
               ),
               const SizedBox(height: 10),
-
               PrimaryButton(
                 text: 'Change password',
                 onPressed: _isSaving ? () {} : _changePassword,
